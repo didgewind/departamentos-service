@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: departamentos-service
+
+server:
+  port: 7777
+  
+eureka:
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+
+app:
+  empleadosServiceAlias: empleados-service

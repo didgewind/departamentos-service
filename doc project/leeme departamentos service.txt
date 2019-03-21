@@ -1,0 +1,3 @@
+Servicio REST con departamentos y empleados en cada departamento. Un controlador con un mapa de objetos
+Departamento. El controlador tiene un @PostConstruct que accede a empleados-service para inicializar
+el mapa de Departamentos.
