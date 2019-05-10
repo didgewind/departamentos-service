@@ -1,11 +1,11 @@
 package profe.ms.departamentosRest.controllers;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -53,6 +53,20 @@ public class DepartamentosRestController {
 	
 	@GetMapping
 	public Collection<Departamento> getAllDepartamentos() {
+		/*
+		 * Para probar hystrix vamos a recuperar los empleados del servicio uno a uno,
+		 * y para los que fallen devolveremos un empleado dummy
+		 */
+		// Para cada departamento
+		departamentos.forEach((key, dpto) -> {
+			List<Empleado> empleados = dpto.getEmpleados();
+			// Para cada empleado
+			// Recuperar ese empleado del servicio, y sustituirlo en el array
+			for (int index=0; index < empleados.size(); index ++) {
+				Empleado empleado = empleados.get(index);
+				empleados.set(index, empleadosService.getEmpleado(empleado.getCif()));
+			}
+		});
 		return departamentos.values();
 	}
 	
