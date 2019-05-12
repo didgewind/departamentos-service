@@ -1,22 +1,20 @@
 package profe.ms.empleadosweb.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Primary;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import profe.ms.empleados.model.Empleado;
-import profe.ms.empleadosweb.exceptions.EmpleadoDuplicadoException;
 import profe.ms.empleadosweb.exceptions.EmpleadosException;
 import profe.ms.empleadosweb.exceptions.RestTemplateErrorHandler;
 
@@ -54,8 +52,13 @@ public class EmpleadosServiceRibbonProgramado implements EmpleadosService {
 	}
 
 	@Override
+	@HystrixCommand(fallbackMethod = "getEmpleadoFallback")
 	public Empleado getEmpleado(String cif) {
 		return getRestTemplate().getForObject(getBaseUrl() + cif, Empleado.class);
+	}
+
+	private Empleado getEmpleadoFallback(String cif) {
+		return new Empleado(cif, "dumb", "dumb", 100);
 	}
 
 	@Override
