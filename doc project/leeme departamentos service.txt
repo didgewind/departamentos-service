@@ -1,3 +1,10 @@
 Servicio REST con departamentos y empleados en cada departamento. Un controlador con un mapa de objetos
-Departamento. El controlador tiene un @PostConstruct que accede a empleados-service para inicializar
-el mapa de Departamentos.
+Departamento. Inicializamos este mapa tras recibir el evento InstanceRegisteredEvent de eureka (antes lo
+hacíamos en un @PostConstruct, pero da problemas si queremos usar un RestTemplate @LoadBalanced o
+queremos lanzar múltiples instancias del microservicio, por intentar comunicarnos con Eureka antes
+de que Eureka tenga conocimiento de que existimos).
+
+Además probamos hystrix. Para ello, el método getAllDepartamentos() del controlador, en vez de devolver
+directamente el values() del mapa, se comunica de nuevo con el servicio de empleados y va pidiendo cada
+empleado por separado. El método getEmpleado tiene configurado hystrix para devolver un dummy empleado
+en caso de error (se puede probar tirando el servicio de empleados).

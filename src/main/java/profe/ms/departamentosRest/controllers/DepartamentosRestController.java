@@ -1,6 +1,5 @@
 package profe.ms.departamentosRest.controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +9,15 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.event.InstanceRegisteredEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.netflix.discovery.DiscoveryClient;
+import com.netflix.discovery.EurekaEvent;
+import com.netflix.discovery.EurekaEventListener;
 
 import profe.ms.empleados.model.Departamento;
 import profe.ms.empleados.model.Empleado;
@@ -29,25 +34,27 @@ public class DepartamentosRestController {
 	@Autowired
 	private EmpleadosService empleadosService;
 	
-	@PostConstruct
-	public void init() {
-		// Crear departamentos y mapa
-		departamentos = new HashMap<>();
-		Departamento dptRRHH = new Departamento("RRHH", "Recursos Humanos");
-		Departamento dptID = new Departamento("I+D", "Informática");
-		departamentos.put(dptRRHH.getId(), dptRRHH);
-		departamentos.put(dptID.getId(), dptID);
-		// Recuperar empleados de ms
-		Empleado[] empleados = empleadosService.getAllEmpleados();
-		// asignar empleados a dpts
-		boolean bRrhh = true;
-		for (Empleado emp: empleados) {
-			if (bRrhh) {
-				dptRRHH.getEmpleados().add(emp);
-			} else {
-				dptID.getEmpleados().add(emp);
+	@EventListener
+	public void init(Object event) {
+		if (event instanceof InstanceRegisteredEvent) {
+			// Crear departamentos y mapa
+			departamentos = new HashMap<>();
+			Departamento dptRRHH = new Departamento("RRHH", "Recursos Humanos");
+			Departamento dptID = new Departamento("I+D", "Informática");
+			departamentos.put(dptRRHH.getId(), dptRRHH);
+			departamentos.put(dptID.getId(), dptID);
+			// Recuperar empleados de ms
+			Empleado[] empleados = empleadosService.getAllEmpleados();
+			// asignar empleados a dpts
+			boolean bRrhh = true;
+			for (Empleado emp: empleados) {
+				if (bRrhh) {
+					dptRRHH.getEmpleados().add(emp);
+				} else {
+					dptID.getEmpleados().add(emp);
+				}
+				bRrhh = !bRrhh;
 			}
-			bRrhh = !bRrhh;
 		}
 	}
 	
@@ -69,7 +76,5 @@ public class DepartamentosRestController {
 		});
 		return departamentos.values();
 	}
-	
-
 
 }
