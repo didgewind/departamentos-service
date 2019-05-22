@@ -43,6 +43,7 @@ public class EmpleadosServiceRibbonProgramado implements EmpleadosService {
 	private RestTemplate getRestTemplate() {
 		return restTemplateBuilder
 				.errorHandler(new RestTemplateErrorHandler())
+				.basicAuthorization("profe", "profe")
 				.build();
 	}
 	

@@ -13,5 +13,11 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        
 app:
   empleadosServiceAlias: empleados-service

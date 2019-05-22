@@ -1,10 +1,21 @@
 Servicio REST con departamentos y empleados en cada departamento. Un controlador con un mapa de objetos
-Departamento. Inicializamos este mapa tras recibir el evento InstanceRegisteredEvent de eureka (antes lo
+Departamento. Inicializamos este mapa conectándonos con el servicio de empleados tras recibir el evento 
+InstanceRegisteredEvent de eureka (antes lo
 hacíamos en un @PostConstruct, pero da problemas si queremos usar un RestTemplate @LoadBalanced o
 queremos lanzar múltiples instancias del microservicio, por intentar comunicarnos con Eureka antes
-de que Eureka tenga conocimiento de que existimos).
+de que Eureka tenga conocimiento de que existimos). Cableamos para ello las credenciales profe - profe.
+
+De momento no tenemos implementada seguridad, así que podemos acceder a este servicio sin credenciales.
+
 
 Además probamos hystrix. Para ello, el método getAllDepartamentos() del controlador, en vez de devolver
 directamente el values() del mapa, se comunica de nuevo con el servicio de empleados y va pidiendo cada
 empleado por separado. El método getEmpleado tiene configurado hystrix para devolver un dummy empleado
 en caso de error (se puede probar tirando el servicio de empleados).
+
+Al hystrix dashboard accedemos con la url http://localhost:7777/hystrix/monitor?stream=http://localhost:7777/actuator/hystrix.stream
+
+Se integra con los branch departamentos del cliente web y el checkout Cambiamos Post por Put
+del empleados spring-boot
+
+Algo sucede con el launch group que este proyecto no arranca, lo relanzamos y ya está
