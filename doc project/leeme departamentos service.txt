@@ -5,7 +5,10 @@ hacíamos en un @PostConstruct, pero da problemas si queremos usar un RestTempla
 queremos lanzar múltiples instancias del microservicio, por intentar comunicarnos con Eureka antes
 de que Eureka tenga conocimiento de que existimos). Cableamos para ello las credenciales profe - profe.
 
-De momento no tenemos implementada seguridad, así que podemos acceder a este servicio sin credenciales.
+Accedemos al servicio sin credenciales, pero con https. Está configurado para que al instalar
+el crt rootCA.crt como certificado authority en un navegador, al acceder a la app aparezca la conexión
+como segura (explicados los pasos en keystores/pasos.txt). Aquí utilizamos el keystore, que es un almacén
+que usaremos para almacenar nuestra clave privada y certificado (del server).
 
 
 Además probamos hystrix. Para ello, el método getAllDepartamentos() del controlador, en vez de devolver

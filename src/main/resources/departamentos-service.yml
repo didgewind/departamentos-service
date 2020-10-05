@@ -4,6 +4,18 @@ spring:
 
 server:
   port: 7777
+  #keystore details
+  ssl:
+    key-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/keystore.jks
+    key-store-password: resiliencia
+    key-alias: localhost # -name al generar localhost.p12
+    key-password: belleza
+    enabled: true
+
+  #truststore details - verifying client certificates
+#    trust-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/servertruststore.p12
+#    trust-store-password: 1qaz2wsx
+#    client-auth: need
   
 eureka:
   client:

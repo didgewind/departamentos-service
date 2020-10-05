@@ -1,0 +1,67 @@
+Seguimos pasos en https://www.baeldung.com/x-509-authentication-in-spring-security:
+
+1 - Generar certificado root, instalarlo en authorities del navegador y configurar keystore.jks en nuestra
+app para que al acceder desde el navegador la conexión aparezca como segura
+==========================================================================================================
+
+--------------------------------------------
+Self-signed root CA certificate (rootCA.crt)
+--------------------------------------------
+
+* Generar clave privada y certificado ca (pass phrase for rootCA.key: abundancia. Organization es Made Ltd y CN Made):
+
+openssl req -x509 -sha256 -days 3650 -newkey rsa:2048 -keyout rootCA.key -out rootCA.crt
+
+---------------------------------------
+Server-side Certificate (localhost.crt)
+---------------------------------------
+
+* certificate signing request (CSR) / pass phrase for localhost.key: confianza. Organization es Made Ltd y CN localhost):
+
+openssl req -new -newkey rsa:2048 -keyout localhost.key -out localhost.csr
+
+* Crear fichero localhost.ext con lo siguiente:
+
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = localhost
+
+* sign the request with our rootCA.crt certificate and its private key (abundancia):
+
+openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in localhost.csr -out localhost.crt -days 4096 -CAcreateserial -extfile localhost.ext
+
+(para ver los datos del certificado, openssl x509 -in localhost.crt -text)
+
+----------------------
+Import to the Keystore
+----------------------
+
+* package our server's private key together with the signed certificate to localhost.p12 (confianza, belleza):
+
+openssl pkcs12 -export -out localhost.p12 -name "localhost" -inkey localhost.key -in localhost.crt
+
+* create a keystore.jks repository and import the localhost.p12 file (belleza, resiliencia):
+
+keytool -importkeystore -srckeystore localhost.p12 -srcstoretype PKCS12 -destkeystore keystore.jks -deststoretype JKS
+
+---------------------
+Configurar app server
+---------------------
+
+* Añadir lo siguiente al .yml:
+
+server:
+  #keystore details
+  ssl:
+    key-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/keystore.jks
+    key-store-password: resiliencia
+    key-alias: localhost # -name al generar localhost.p12
+    key-password: belleza
+    enabled: true
+    
+* Declarar un WebSecurityConfigurerAdapter en el que concedamos permisos de acceso a todo el mundo
+
+* Importar el rootCA.crt en el navegador (firefox, para no tener que cerrar todas las pestañas de chrome) y
+acceder a https://localhost:7777/departamentos
