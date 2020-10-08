@@ -5,3 +5,7 @@
 * Export Password for localhost.p12: belleza
 
 * keystore.jks password: resiliencia
+
+* truststore.jks password: empatia
+
+* Export password for clientBob.p12: ausencia

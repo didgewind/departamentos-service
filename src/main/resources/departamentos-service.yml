@@ -13,9 +13,9 @@ server:
     enabled: true
 
   #truststore details - verifying client certificates
-#    trust-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/servertruststore.p12
-#    trust-store-password: 1qaz2wsx
-#    client-auth: need
+    trust-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/truststore.jks
+    trust-store-password: empatia
+    client-auth: need
   
 eureka:
   client:

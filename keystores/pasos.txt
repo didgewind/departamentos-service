@@ -1,6 +1,7 @@
 Seguimos pasos en https://www.baeldung.com/x-509-authentication-in-spring-security:
 
-1 - Generar certificado root, instalarlo en authorities del navegador y configurar keystore.jks en nuestra
+==========================================================================================================
+Generar certificado root, instalarlo en authorities del navegador y configurar keystore.jks en nuestra
 app para que al acceder desde el navegador la conexión aparezca como segura
 ==========================================================================================================
 
@@ -65,3 +66,47 @@ server:
 
 * Importar el rootCA.crt en el navegador (firefox, para no tener que cerrar todas las pestañas de chrome) y
 acceder a https://localhost:7777/departamentos
+
+=====================================================================================================
+Autenticación Mutua. Que el cliente tenga que presentar un certificado para poder acceder al servidor
+=====================================================================================================
+
+--------------------------------------
+TrustStore y almacenar el rootCA en él
+--------------------------------------
+
+* create a truststore.jks file and import the rootCA.crt (empatia)
+
+keytool -import -trustcacerts -noprompt -alias ca -ext san=dns:localhost,ip:127.0.0.1 -file rootCA.crt -keystore truststore.jks
+
+---------------------
+Configurar app server
+---------------------
+
+* Modificar WebSecurityConfigurerAdapter
+
+* Modificar .yml:
+
+server:
+  ssl:
+    trust-store: /home/storage/madehomeextra/Documents/Freelance/workspaces especializados/spring mvc, rest, boot y cloud/departamentos service/keystores/truststore.jks
+    trust-store-password: empatia
+    client-auth: need
+
+----------------------------------------------
+Client-side Certificate - Acceso desde browser
+----------------------------------------------
+
+* certificate signing request (Organization es Made Ltd y CN Bob):
+
+openssl req -new -newkey rsa:4096 -nodes -keyout clientBob.key -out clientBob.csr
+
+* sign the request with our CA (abundancia):
+
+openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in clientBob.csr -out clientBob.crt -days 4096 -CAcreateserial
+
+* package the signed certificate and the private key into the PKCS file (ausencia):
+
+openssl pkcs12 -export -out clientBob.p12 -name "clientBob" -inkey clientBob.key -in clientBob.crt
+
+* Importar el certificado cliente en el browser (en mis certificados)
