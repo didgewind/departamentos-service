@@ -8,4 +8,9 @@
 
 * truststore.jks password: empatia
 
-* Export password for clientBob.p12: ausencia
+* Export password for clientBob.p12: ausencia (usamos la misma password aquí y en los client stores porque parece que con
+tomcat es obligatorio que sea la misma pass)
+
+* clientBobKeystore.jks password: ausencia
+
+* clientBobTruststore.p12 password: ausencia

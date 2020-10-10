@@ -110,3 +110,16 @@ openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in clientBob.csr -out client
 openssl pkcs12 -export -out clientBob.p12 -name "clientBob" -inkey clientBob.key -in clientBob.crt
 
 * Importar el certificado cliente en el browser (en mis certificados)
+
+----------------------------------------------
+Client-side Certificate - Acceso desde app - en los client stores usamos la misma password que en su clave porque parece que con
+tomcat es obligatorio que sea la misma pass)
+----------------------------------------------
+
+* create a clientBobKeystore.jks repository and import the clientBob.p12 file (ausencia, ausencia):
+
+keytool -importkeystore -srckeystore clientBob.p12 -srcstoretype PKCS12 -destkeystore clientBobKeystore.jks -deststoretype JKS
+
+* Import the server certificate into client truststore (ausencia, yes)
+
+keytool -importcert -file rootCA.crt -keystore clientBobTruststore.p12 -alias clientBob
