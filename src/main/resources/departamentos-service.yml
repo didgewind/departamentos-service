@@ -2,6 +2,17 @@ spring:
   application:
     name: departamentos-service
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/departamentos
+
+# Username and password
+    username: maza
+    password: maza
+
+# Keep the connection alive if idle for a long time (needed in production)
+    testWhileIdle: true
+    validationQuery: SELECT 1
+    
 server:
   port: 7777
   

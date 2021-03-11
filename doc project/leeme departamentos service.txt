@@ -1,15 +1,19 @@
-Servicio REST con departamentos y empleados en cada departamento. Un controlador con un mapa de objetos
-Departamento. Inicializamos este mapa conectándonos con el servicio de empleados tras recibir el evento 
-InstanceRegisteredEvent de eureka (antes lo
-hacíamos en un @PostConstruct, pero da problemas si queremos usar un RestTemplate @LoadBalanced o
-queremos lanzar múltiples instancias del microservicio, por intentar comunicarnos con Eureka antes
-de que Eureka tenga conocimiento de que existimos). Cableamos para ello las credenciales profe - profe.
+Servicio REST con departamentos y empleados en cada departamento. En esta rama tenemos acceso a la bd, 
+y recuperamos los empleados de cada departamento cuando se nos piden los departamentos a través del 
+servicio de empleados. Cableamos para ello las credenciales profe - profe.
+
+La bd consta de una tabla de departamentos y otra que relaciona empleados con departamentos. 
+Para que la bd esté consistente hay que lanzar los scripts de creación de empleados_simple
+y de departamentos. Un
+empleado puede pertenecer a 0 o varios departamentos. La idea es poder probar transacciones
+distribuidas en microservicios eliminando un empleado y fallando al eliminar los registros
+de ese empleado en empleados_departamentos.
 
 De momento no tenemos implementada seguridad, así que podemos acceder a este servicio sin credenciales.
 
-
-Además probamos hystrix. Para ello, el método getAllDepartamentos() del controlador, en vez de devolver
-directamente el values() del mapa, se comunica de nuevo con el servicio de empleados y va pidiendo cada
+Además tenemos un mapeo de /departamentos/hystrix para probar hystrix. Para ello, el método 
+getAllDepartamentosConHystrix() del controlador, en vez de devolver
+directamente el values() del mapa, va pidiendo al servicio de empleados cada
 empleado por separado. El método getEmpleado tiene configurado hystrix para devolver un dummy empleado
 en caso de error (se puede probar tirando el servicio de empleados).
 

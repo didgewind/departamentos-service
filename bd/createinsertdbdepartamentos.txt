@@ -1,0 +1,40 @@
+## Base de datos para el microservicio de departamentos ##
+
+# Para que no haya incoherencias hay que resetear también la bd de empleados_simple
+
+drop database if exists departamentos;
+
+create database if not exists departamentos;
+use departamentos;
+
+## CREATES ##
+
+# Tablas de entidades
+
+CREATE TABLE IF NOT EXISTS `departamentos` (
+  `id` VARCHAR(10) NOT NULL,
+  `descripcion` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE IF NOT EXISTS `empleados_departamentos` (
+  `id_departamento` VARCHAR(10) NOT NULL,
+  `cif` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id_departamento`, `cif`),
+  CONSTRAINT `fk_empleados_departamentos_1`
+    FOREIGN KEY (`id_departamento`)
+    REFERENCES `departamentos`.`departamentos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+grant all on departamentos.* to maza@localhost;
+
+INSERT INTO departamentos (id, descripcion) VALUES
+("RRHH", "Recursos Humanos"),
+("I+D", "Investigación y Desarrollo");
+
+INSERT INTO empleados_departamentos (cif, id_departamento) VALUES
+("34334789H", "RRHH"),
+("21094387T", "RRHH"),
+("01293474E", "I+D"),
+("23948745F", "I+D"),
+("40948574G", "I+D");
