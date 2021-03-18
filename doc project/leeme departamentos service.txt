@@ -2,12 +2,22 @@ Servicio REST con departamentos y empleados en cada departamento. En esta rama t
 y recuperamos los empleados de cada departamento cuando se nos piden los departamentos a través del 
 servicio de empleados. Cableamos para ello las credenciales profe - profe.
 
-La bd consta de una tabla de departamentos y otra que relaciona empleados con departamentos. 
+Tenemos dos daos, uno tira de una bd mysql con JdbcTemplate y la otra de mongodb con MongoRepository.
+
+La bd mysql consta de una tabla de departamentos y otra que relaciona empleados con departamentos. 
 Para que la bd esté consistente hay que lanzar los scripts de creación de empleados_simple
 y de departamentos. Un
 empleado puede pertenecer a 0 o varios departamentos. La idea es poder probar transacciones
 distribuidas en microservicios eliminando un empleado y fallando al eliminar los registros
 de ese empleado en empleados_departamentos.
+
+La bd mongo consta de una colección departamentos con un documento departamentos. Los empleados
+de cada departamento están representados en este documento sólo con el cif. La clase de negocio
+es la misma para los dos Daos aunque se podría optimizar cuando utilizamos el MongoDAO ya que la
+consulta getAllDepartamentos() ya devuelve los departamentos con sus empleados (que sólo tienen
+el cif relleno) por lo que nos podríamos ahorrar la llamada a getEmpleadosXDpto(dptoId). Al igual
+que con el Dao anterior, lo mejor es partir de una bd limpia para evitar inconsistencias (ejecutar
+el script de generación de empleados y de generación de la bd mongo de departamentos).  
 
 De momento no tenemos implementada seguridad, así que podemos acceder a este servicio sin credenciales.
 

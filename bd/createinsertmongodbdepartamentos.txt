@@ -1,0 +1,10 @@
+use departamentos;
+
+db.departamentos.drop();
+
+db.departamentos.insertMany([
+{"_id":"I+D","desc":"Informática",
+	"empleados": [{"cif":"01293474E"},{"cif":"23948745F"},{"cif":"40948574G"}]},
+{"_id":"RRHH","desc":"Recursos Humanos",
+	"empleados":[{"cif":"21094387T"},{"cif":"34334789H"}]}
+]);

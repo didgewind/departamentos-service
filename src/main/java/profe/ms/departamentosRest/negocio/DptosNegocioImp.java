@@ -35,9 +35,9 @@ public class DptosNegocioImp implements DptosNegocio {
 				.stream().collect(Collectors.toMap(Empleado::getCif, Function.identity())); 
 		// Recupero empleados_departamentos
 		dptos.forEach(dpto -> {
-			List<Empleado> empleados = dao
-					.getEmpleadosXDpto(dpto.getId())
+			List<Empleado> empleados = dpto.getEmpleados()
 					.stream()
+					.map(Empleado::getCif)
 					.map(cif -> empleadosMap.get(cif)).collect(Collectors.toList());
 			dpto.setEmpleados(empleados);
 		});
