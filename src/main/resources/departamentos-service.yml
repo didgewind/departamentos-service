@@ -21,7 +21,7 @@ spring:
 #      password: root
       database: departamentos
 #      port: 27017
-#      host: localhost   
+      host: 172.17.0.1   
 
 server:
   port: 7777
@@ -30,9 +30,14 @@ eureka:
   client:
     enabled: true
     serviceUrl:
-      defaultZone: http://localhost:1111/eureka/
+      # Al ejecutar desde docker activaremos EUREKA_SERVER así:
+      # ENTRYPOINT ["java", "-DEUREKA_SERVER=http://eureka-service:1111/eureka","-jar","/empleados-rest-0.0.1-SNAPSHOT.jar"]
+      defaultZone: ${EUREKA_SERVER:http://localhost:1111/eureka/}
+#      defaultZone: http://eureka-service:1111/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 5
+# Generamos id aleatorio para poder registrar diferentes instancias con eureka
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
 management:
   endpoints:
