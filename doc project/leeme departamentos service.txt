@@ -2,6 +2,18 @@ Servicio REST con departamentos y empleados en cada departamento. En esta rama t
 y recuperamos los empleados de cada departamento cuando se nos piden los departamentos a través del 
 servicio de empleados. Cableamos para ello las credenciales profe - profe.
 
+La seguridad en esta rama la implementamos con oauth2. Tenemos un servidor de autenticación
+(oauth2) del que el cliente que quiera acceder a este microservicio debe obtener primero el
+código de autorización y a continuación el token de acceso. Con este token accede a nuestro
+servicio de departamentos. Este servicio consulta el mismo servicio de Autenticación
+(oauth2) a través de su url /auth/user (definida en el .yml con la clave 
+security.oauth2.resource.userInfoUri=http://localhost:9999/auth/user) para decodificar
+el token y obtener un Principal. Sobre ese Principal se aplicarán las políticas
+de autorización sobre este microservicio.
+
+Hay que hacer notar que ahora los usuarios, roles y passwords se declaran únicamente en el server
+de autenticación. El resto de servicios definen únicamente las autorizaciones en función de roles.
+
 Tenemos dos daos, uno tira de una bd mysql con JdbcTemplate y la otra de mongodb con MongoRepository.
 
 La bd mysql consta de una tabla de departamentos y otra que relaciona empleados con departamentos. 
@@ -18,8 +30,6 @@ consulta getAllDepartamentos() ya devuelve los departamentos con sus empleados (
 el cif relleno) por lo que nos podríamos ahorrar la llamada a getEmpleadosXDpto(dptoId). Al igual
 que con el Dao anterior, lo mejor es partir de una bd limpia para evitar inconsistencias (ejecutar
 el script de generación de empleados y de generación de la bd mongo de departamentos).  
-
-De momento no tenemos implementada seguridad, así que podemos acceder a este servicio sin credenciales.
 
 Además tenemos un mapeo de /departamentos/hystrix para probar hystrix. Para ello, el método 
 getAllDepartamentosConHystrix() del controlador, en vez de devolver

@@ -23,6 +23,9 @@ spring:
 #      port: 27017
 #      host: localhost   
 
+  security:
+    sessions: NEVER
+
 server:
   port: 7777
   
@@ -42,3 +45,10 @@ management:
         
 app:
   empleadosServiceAlias: empleados-service
+  
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:9999/auth/user
+      
+      
