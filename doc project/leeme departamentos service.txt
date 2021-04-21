@@ -2,6 +2,19 @@ Servicio REST con departamentos y empleados en cada departamento. En esta rama t
 y recuperamos los empleados de cada departamento cuando se nos piden los departamentos a través del 
 servicio de empleados. Cableamos para ello las credenciales profe - profe.
 
+Ésta es la rama para pruebas Saga y CQRS. Ahora mismo estamos usando kafka para recibir
+un mensaje de texto informando del empleado que se acaba de insertar desde el ms
+de empleados. Lo configuramos en el .yml (con la clave spring.kafka.consumer) y recibimos 
+los mensajes en el negocio SagaListener.
+Para que funcione todo previamente necesitamos lanzar kafka y crear el topic (si no existe
+aún) con los siguientes comandos (desde el folder kafka, en mi caso ~/applications/kafka_2.13-2.8.0):
+
+	bin/zookeeper-server-start.sh [-daemon]config/zookeeper.properties
+
+	bin/kafka-server-start.sh config/server.properties
+	
+	bin/kafka-topics.sh --create --topic empleados-events --bootstrap-server localhost:9092
+
 Tenemos dos daos, uno tira de una bd mysql con JdbcTemplate y la otra de mongodb con MongoRepository.
 
 La bd mysql consta de una tabla de departamentos y otra que relaciona empleados con departamentos. 

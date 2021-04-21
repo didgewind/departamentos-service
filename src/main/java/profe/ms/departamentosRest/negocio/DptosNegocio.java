@@ -2,7 +2,7 @@ package profe.ms.departamentosRest.negocio;
 
 import java.util.List;
 
-import profe.ms.empleados.model.Departamento;
+import profe.empleados.model.Departamento;
 
 public interface DptosNegocio {
 

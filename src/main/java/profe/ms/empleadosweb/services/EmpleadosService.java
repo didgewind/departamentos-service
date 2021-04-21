@@ -1,6 +1,6 @@
 package profe.ms.empleadosweb.services;
 
-import profe.ms.empleados.model.Empleado;
+import profe.empleados.model.Empleado;
 
 public interface EmpleadosService {
 

@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import profe.ms.empleados.model.Departamento;
+import profe.empleados.model.Departamento;
 
 @Repository(value = "daoDptosJdbc")
 @Lazy

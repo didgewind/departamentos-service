@@ -1,6 +1,5 @@
 package profe.ms.departamentosRest.controllers;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -9,9 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import profe.empleados.model.Departamento;
 import profe.ms.departamentosRest.negocio.DptosNegocio;
-import profe.ms.empleados.model.Departamento;
-import profe.ms.empleados.model.Empleado;
 
 @RestController
 @RequestMapping("/departamentos")

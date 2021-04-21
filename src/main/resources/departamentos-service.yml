@@ -23,9 +23,16 @@ spring:
 #      port: 27017
 #      host: localhost   
 
+  kafka:
+    consumer:
+      group-id: empleadosEvents
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 server:
-  port: 7777
-  
+#  port: 7777
+  port: ${PORT:0}  
 eureka:
   client:
     enabled: true
@@ -33,6 +40,7 @@ eureka:
       defaultZone: http://localhost:1111/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 5
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
 management:
   endpoints:
@@ -42,3 +50,4 @@ management:
         
 app:
   empleadosServiceAlias: empleados-service
+  empleadosTopic: empleados-events

@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-import profe.ms.empleados.model.Empleado;
+import profe.empleados.model.Empleado;
 import profe.ms.empleadosweb.exceptions.EmpleadosException;
 import profe.ms.empleadosweb.exceptions.RestTemplateErrorHandler;
 

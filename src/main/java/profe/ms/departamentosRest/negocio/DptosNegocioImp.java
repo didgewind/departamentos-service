@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import profe.empleados.model.Departamento;
+import profe.empleados.model.Empleado;
 import profe.ms.departamentosRest.daos.DptosDAO;
-import profe.ms.empleados.model.Departamento;
-import profe.ms.empleados.model.Empleado;
 import profe.ms.empleadosweb.services.EmpleadosService;
 
 @Service

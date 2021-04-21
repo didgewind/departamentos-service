@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import profe.ms.empleados.model.Departamento;
-import profe.ms.empleados.model.Empleado;
+import profe.empleados.model.Departamento;
+import profe.empleados.model.Empleado;
 
 @Repository
 @Primary
