@@ -34,4 +34,13 @@ public class DptosDAOMongo implements DptosDAO {
 				.map(Empleado::getCif).collect(Collectors.toList());
 	}
 
+	@Override
+	public boolean eliminaEmpleadoDeDpto(String cif) {
+		getAllDepartamentos().forEach(dpto -> {
+			dpto.getEmpleados().remove(new Empleado(cif, null, null, 0));
+			repository.save(dpto);
+		});
+		return true;
+	}
+
 }

@@ -58,4 +58,10 @@ public class DptosDAOJdbc implements DptosDAO {
 		return this.jdbcTemplate.queryForList(ConstantesSQL.SELECT_EMPLEADOS_X_DPTO, String.class, idDpto); 
 	}
 
+	@Override
+	public boolean eliminaEmpleadoDeDpto(String cif) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -28,11 +28,19 @@ spring:
       group-id: empleadosEvents
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring:
+        json:
+          trusted:
+            packages: profe.empleados.model
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    
 server:
-#  port: 7777
-  port: ${PORT:0}  
+  port: 7777
+#  port: ${PORT:0}  
 eureka:
   client:
     enabled: true
@@ -51,3 +59,4 @@ management:
 app:
   empleadosServiceAlias: empleados-service
   empleadosTopic: empleados-events
+  sagaTopic: saga-control-events

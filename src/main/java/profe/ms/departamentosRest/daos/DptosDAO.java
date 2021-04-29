@@ -12,4 +12,5 @@ public interface DptosDAO {
 	
 	List<String> getEmpleadosXDpto(String idDpto);
 
+	boolean eliminaEmpleadoDeDpto(String cif);
 }
