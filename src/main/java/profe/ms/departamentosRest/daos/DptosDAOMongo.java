@@ -19,8 +19,10 @@ public class DptosDAOMongo implements DptosDAO {
 	
 	@Override
 	public boolean asignaEmpleadoADpto(String cif, String idDpto) {
-		// TODO Auto-generated method stub
-		return false;
+		Departamento dpto = repository.findById(idDpto).get();
+		dpto.getEmpleados().add(new Empleado(cif, null, null, 0));
+		repository.save(dpto);
+		return true;
 	}
 
 	@Override

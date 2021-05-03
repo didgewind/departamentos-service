@@ -1,19 +1,38 @@
+Eureka, mongodb, hystrix, no sec, no config server, credenciales de acceso a empleados cableadas
+
 Servicio REST con departamentos y empleados en cada departamento. En esta rama tenemos acceso a la bd, 
 y recuperamos los empleados de cada departamento cuando se nos piden los departamentos a través del 
 servicio de empleados. Cableamos para ello las credenciales profe - profe.
 
-Ésta es la rama para pruebas Saga y CQRS. Ahora mismo estamos usando kafka para recibir
-un mensaje de texto informando del empleado que se acaba de insertar desde el ms
-de empleados. Lo configuramos en el .yml (con la clave spring.kafka.consumer) y recibimos 
-los mensajes en el negocio SagaListener.
-Para que funcione todo previamente necesitamos lanzar kafka y crear el topic (si no existe
-aún) con los siguientes comandos (desde el folder kafka, en mi caso ~/applications/kafka_2.13-2.8.0):
+Ésta es la rama para pruebas Saga y CQRS. Ahora mismo procesamos EmpleadosEvents con la clase
+EmpleadosEventsListener para los tipos de evento CREATE y DELETE, que provocan respectivamente
+una asociación nueva en la bd (del empleado creado al dpto
+indicado en el evento) y una eliminación de esa asociación. Además hemos refactorizado
+el SagaEventsProducer para que sea más user friendly.
 
-	bin/zookeeper-server-start.sh [-daemon]config/zookeeper.properties
+Todo esto lo configuramos entre el .yml, el negocio y el paquete Saga
+(usando un KafkaTemplate y un SagaEventsListener).
 
-	bin/kafka-server-start.sh config/server.properties
+Para que funcione todo previamente necesitamos lanzar kafka y crear el topic (con las tres particiones)
+con los siguientes comandos (desde el folder kafka, en mi caso ~/applications/kafka_2.13-2.8.0):
+
+	bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+
+	bin/kafka-server-start.sh -daemon config/server.properties
 	
-	bin/kafka-topics.sh --create --topic empleados-events --bootstrap-server localhost:9092
+	bin/kafka-topics.sh --create --topic empleados-events --replication-factor 1 \
+    --partitions 3 --bootstrap-server localhost:9092
+
+	bin/kafka-topics.sh --create --topic saga-control-events --replication-factor 1 \
+    --partitions 3 --bootstrap-server localhost:9092
+    
+Podemos probar que el servicio de empleados (y el de departamentos) están enviando / recibiendo
+datos lanzando un par de consumidores de esta manera:
+
+	bin/kafka-console-consumer.sh --topic empleados-events --from-beginning --bootstrap-server localhost:9092
+	
+para lanzar el consumidor de eventos del servicio de departamentos ejecutar el mismo comando
+sustituyendo empleados-events por saga-control-events
 
 Tenemos dos daos, uno tira de una bd mysql con JdbcTemplate y la otra de mongodb con MongoRepository.
 

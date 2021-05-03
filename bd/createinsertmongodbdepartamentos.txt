@@ -1,4 +1,4 @@
-use departamentos;
+use departamentos; # Esta instrucción ya crea la bd
 
 db.departamentos.drop();
 
